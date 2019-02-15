@@ -1,21 +1,14 @@
-/* Паттерн Builder, помог обьединить 2 сущности в одну,
-уменьшить количество полей, комбинация из нескольких полей создает
-разные сообщения. Применил в проекте облачное хранилище
-смотреть здесь https://github.com/Maxim-ka/cloud_storage
- */
-
 import java.io.File;
 import java.io.Serializable;
 
 public class Message implements Serializable {
-
-    private final String command;
-    private final String nameCatalog;
-    private final File[] catalogFiles;
-    private final File file;
-    private final int portion;
-    private final int total;
-    private final byte[] bytes;
+    private String command;
+    private String nameCatalog;
+    private File[] catalogFiles;
+    private File file;
+    private int portion;
+    private int total;
+    private byte[] bytes;
 
     public String getCommand() {
         return command;
@@ -45,62 +38,74 @@ public class Message implements Serializable {
         return bytes;
     }
 
+    private void setNameCatalog(String nameCatalog) {
+        this.nameCatalog = nameCatalog;
+    }
+
+    private void setCatalogFiles(File[] catalogFiles) {
+        this.catalogFiles = catalogFiles;
+    }
+
+    private void setFile(File file) {
+        this.file = file;
+    }
+
+    private void setPortion(int portion) {
+        this.portion = portion;
+    }
+
+    private void setTotal(int total) {
+        this.total = total;
+    }
+
+    private void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+
+    private Message(String command) {
+        this.command = command;
+    }
+
     public static class Builder{
 
-        private String command;
-        private String nameCatalog;
-        private File[] catalogFile;
-        private File file;
-        private int portion;
-        private int total;
-        private byte[] bytes;
+        private Message message;
 
         public Builder(String command) {
-            this.command = command;
+            message = new Message(command);
         }
 
         public Builder addNameCatalog(String nameCatalog){
-            this.nameCatalog = nameCatalog;
+            message.setNameCatalog(nameCatalog);
             return this;
         }
 
         public Builder addCatalogFile(File[] catalog){
-            this.catalogFile = catalog;
+            message.setCatalogFiles(catalog);
             return this;
         }
 
         public Builder addFile(File file){
-            this.file = file;
+            message.setFile(file);
             return this;
         }
 
         public Builder addPortion(int portion){
-            this.portion = portion;
+            message.setPortion(portion);
             return this;
         }
 
         public Builder addTotal(int total){
-            this.total = total;
+            message.setTotal(total);
             return this;
         }
 
         public Builder addArrayBytes(byte[] bytes){
-            this.bytes = bytes;
+            message.setBytes(bytes);
             return this;
         }
 
         public Message build(){
-            return new Message(this);
+            return message;
         }
-    }
-
-    private Message(Builder builder) {
-        command = builder.command;
-        nameCatalog = builder.nameCatalog;
-        catalogFiles = builder.catalogFile;
-        file = builder.file;
-        portion = builder.portion;
-        total = builder.total;
-        bytes = builder.bytes;
     }
 }
